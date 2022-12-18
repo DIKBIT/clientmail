@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Alert from 'react-bootstrap/Alert';
 
 const Home = () => {
 
     const [email, setEmail] = useState("");
+    const [show, setShow] = useState(false);
     console.log(email)
     const sendEmail = async(e) =>{
         e.preventDefault();
@@ -18,11 +20,24 @@ const Home = () => {
                 email
             })
         });
-        console.log(res)
+        const data = await res.json()
+        if(data.status === 401 || !data){
+            console.log("error")
+        } else{
+            console.log("Email sent");
+            setShow(true);
+            setEmail("")
+        }
 
     }
   return (
     <>
+    {
+        show ? <Alert variant='primary' onClose={() => setShow(false)} dismissible>
+        Email Sent Successfully
+
+        </Alert> : " "
+    },
         <div className='container mt-2'>
         <div className='d-flex justify-content-center '>
             <h2>Send Email with React & Node js</h2>
